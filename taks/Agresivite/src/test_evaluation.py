@@ -1,18 +1,15 @@
 from sklearn.metrics import f1_score
 import pandas as pd 
 
+var_predictions = ["label"]
 def calculate_error(X, y, baselines, name_data):
     f1_scores = {}
-    y_predict_pd = {"user_id": y["label"]}
+    y_predict_pd = {}
     # Next, we are going to calculate the total result
-    for label in ['gender', 'profession', 'ideology_binary', 'ideology_multiclass']:
+    for label in var_predictions:
         # Get the predictions
         y_predict_pd[label] = baselines[label].predict(X)
-        f1_scores["error_"+label] = f1_score(y[label], y_predict_pd[label], average='macro')
-    # print(f1_scores)
-    #print(sum(f1_scores.))
-    # print(sum(f1_scores.values)/float(len(f1_scores)))
-    f1_scores["error_"+name_data] = sum(f1_scores.values())/float(len(f1_scores))
+        f1_scores["error_"+label] = f1_score(y, y_predict_pd[label], average='macro')
     return list(f1_scores.values())
 
     # f1_scores = list(f1_scores.values())

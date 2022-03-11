@@ -8,7 +8,7 @@ Created on Thu May 28 22:10:50 2020
 # ejecutar estas lineas si no esta instalado
 # pip install spacy
 # python -m spacy download es_core_news_sm
-# python -m spacy download en_core_web_sm
+# python -m spacy download es_core_news_sm
 
 
 # en colab
@@ -29,8 +29,7 @@ from nltk.stem.snowball import SnowballStemmer
 englishStemm = SnowballStemmer("english").stem
 spanishStemm = SnowballStemmer("spanish").stem
 import spacy
-import es_core_news_sm
-import en_core_web_sm
+
 sp_es = spacy.load('es_core_news_sm')
 sp_en = spacy.load('en_core_web_sm')
 

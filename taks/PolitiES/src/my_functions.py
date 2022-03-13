@@ -21,7 +21,7 @@ import os
 import re
 import nltk
 
-nltk.download('punkt')
+# nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 import string
 from nltk.stem.snowball import SnowballStemmer
@@ -38,7 +38,7 @@ sp_en = spacy.load('en_core_web_sm')
 # from pattern.es import lemma as spanishlemma
 # from pattern.en import lemma as englishlemma
 
-nltk.download('stopwords')
+# nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 stopEnglish = set(stopwords.words('english'))

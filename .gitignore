@@ -1,3 +1,5 @@
 *.csv
 *.pdf
-
+*.pyc
+*.bin
+*.ipynb_checkpoints

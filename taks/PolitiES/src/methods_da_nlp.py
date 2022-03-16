@@ -21,9 +21,9 @@ def back_translation(lambda_hyper):
 def replacing_embeddings(lambda_hyper):
     if lambda_hyper[0] == "fasttext":
         model_path_embs = '../../fasttext-sbwc.3.6.e20.vec'
-    elif lambda_hyper[1] == "glove":
+    elif lambda_hyper[0] == "glove":
         model_path_embs = "../../glove-sbwc.i25.vec"
-    elif lambda_hyper[2] == "word2vect":
+    elif lambda_hyper[0] == "word2vect":
         model_path_embs  = "../../SBW-vectors-300-min5.vec"
     aug = naw.WordEmbsAug(
         model_type=lambda_hyper[0], model_path=model_path_embs,

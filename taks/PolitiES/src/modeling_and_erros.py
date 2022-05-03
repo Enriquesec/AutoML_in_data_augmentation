@@ -3,10 +3,11 @@ from preprocessing_data_model import *
 from modeling_and_erros import *
 from aux_function import * 
 import csv
-
+import os
 
 from sklearn.svm import SVC 
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
 
 import keras 
 
@@ -24,6 +25,11 @@ names_column_result = ['name_taks', 'model', 'method_da', 'lambda_hyper_1', 'lam
        'error_test_profession', 'error_test_ideology_binary',
        'error_test_ideology_multiclass', 'error_test']
 
+param_grid_reg = [
+    {"C": np.logspace(-3, 3, 7),
+     "penalty": ["l1", "l2"]
+     }
+    ]
 
 def calculate_error(X, y, baselines, name_data):
     f1_scores = {}
@@ -77,10 +83,10 @@ def selection_model(X_train, y_train, model_name, number_cate):
         model = SVC(kernel="linear", C=0.01, random_state=19970808)
         model.fit(X_train, y_train)
     elif model_name=="LogisticRegression":
-        model = LogisticRegression()
+        model = LogisticRegression(max_iter=3000, n_jobs=-1)
+        model = GridSearchCV(model, param_grid=param_grid_reg, cv=3, verbose=True, n_jobs=-1)
         model.fit(X_train, y_train)
     elif model_name=="CNN":
-
         callback = keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
         model = Sequential()
         model.add(Embedding(15000, 300, input_length=500))
@@ -205,7 +211,6 @@ def baseline_polities(path_train=None, path_test=None, model_name=None, method_d
     # load file
     train_test = format_data_origin(path_train, path_test)
     nrow_df = str(train_test["train"].shape[0])
-
     name_task = ["PolitiES"]    
 
     if name_path_da_preprocesing in paths_da_preprocesing: 
@@ -274,3 +279,4 @@ def baseline_polities(path_train=None, path_test=None, model_name=None, method_d
     representation, path_errors, name_path_da, name_path_da_preprocesing, name_path_preprocesing)
     
     return 0
+

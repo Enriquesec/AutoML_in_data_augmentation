@@ -5,9 +5,9 @@ from keras.preprocessing.text import Tokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # var_global_general
-path_save_da = "../data/processed/da/"
-path_save_da_preprocesing = "../data/processed/da_preprocesing/"
-path_save_preprocesing = "../data/processed/preprocesing/"
+path_save_da = "/home/est_posgrado_enrique.santibanez/tesis/PolitiES/data/processed/da/"
+path_save_da_preprocesing = "/home/est_posgrado_enrique.santibanez/tesis/PolitiES/data/processed/da_preprocesing/"
+path_save_preprocesing = "/home/est_posgrado_enrique.santibanez/tesis/PolitiES/data/processed/preprocesing/"
 
 dic_gender = {"male":0, "female":1}
 dic_profession = {"journalist":0, "politician":1}
@@ -24,22 +24,26 @@ def category_col(df=None, var_predictions=['gender', 'profession', 'ideology_bin
   'gender', 'profession', 'ideology_binary', 'ideology_multiclass'
   return df 
 
-def format_data_origin(path_train, path_test):
+def format_data_origin(path_train, path_test, path_evaluate=None):
     reviews_politica = pd.read_csv(path_train)
     reviews_politica_test = pd.read_csv(path_test)
+    reviews_politica_evaluate = pd.read_csv(path_evaluate)
 
     # From now one, dataframes will contain the dataframes
     dataframes = {
       'train': reviews_politica, 
-      'test': reviews_politica_test
+      'test': reviews_politica_test,
+      'evaluate': reviews_politica_evaluate
     }
 
     # NOTE: As loops does not bind variable data, we do sequence unpacking
     for key, df in dataframes.items():
-
+      print(key)
       # These columns are shared for all documents of each user
-      columns_to_group_by_user = ['label', 'gender', 'profession', 'ideology_binary', 'ideology_multiclass']
-
+      if key!="evaluate":
+        columns_to_group_by_user = ['label', 'gender', 'profession', 'ideology_binary', 'ideology_multiclass']
+      else:
+        columns_to_group_by_user = ['label']
 
       # Group the dataframe by user (label)
       group = df.groupby (by = columns_to_group_by_user, dropna = False, observed = True, sort = False)
@@ -63,7 +67,7 @@ def format_data_origin(path_train, path_test):
           merged_fields.append ({**row, **{field: ' [SEP] '.join (df_user[field].fillna ('')) for field in ['tweet']}})
 
       # Modify the original variable dataframe
-      dataframes[key] = category_col(pd.DataFrame(merged_fields))
+      dataframes[key] = pd.DataFrame(merged_fields)
     return dataframes
 
 
